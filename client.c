@@ -6,69 +6,11 @@
 /*   By: ale-roux <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 22:53:20 by ale-roux          #+#    #+#             */
-/*   Updated: 2022/11/25 16:30:51 by ale-roux         ###   ########.fr       */
+/*   Updated: 2022/11/25 16:42:02 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./header/minitalk.h"
-
-size_t	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
-		i++;
-	return (i);
-}
-
-void	*ft_calloc(unsigned int size)
-{
-	char			*ptr;
-	unsigned int	i;
-
-	i = 0;
-	ptr = malloc(size);
-	if (!ptr)
-		return (NULL);
-	while (i < size)
-	{
-		ptr[i] = '\0';
-		i++;
-	}
-	return (ptr);
-}
-
-char	*ft_strjoin(char *s1, char *s2)
-{
-	unsigned int	i;
-	unsigned int	j;
-	char			*str;
-
-	if (!s2)
-		return (NULL);
-	if (!s1)
-		s1 = ft_calloc(1);
-	str = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-	if (str == NULL)
-	{
-		free(s1);
-		return (NULL);
-	}
-	i = -1;
-	j = 0;
-	if (s1)
-		while (s1[++i] != '\0')
-			str[i] = s1[i];
-	while (s2[j] != '\0')
-		str[i++] = s2[j++];
-	str[i] = '\0';
-	free(s1);
-	free(s2);
-	return (str);
-}
 
 int	whitesp(char *str, int *ptr_i)
 {
