@@ -6,7 +6,7 @@
 #    By: ale-roux <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/06 21:21:04 by ale-roux          #+#    #+#              #
-#    Updated: 2022/11/25 17:13:52 by ale-roux         ###   ########.fr        #
+#    Updated: 2022/11/25 17:54:46 by ale-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,8 @@ client: ${NAME}
 
 ${NAME} : ${OBJS}
 		ar rc ${NAME} ${OBJS}
+
+bonus : all
 
 clean :
 		rm -f ${OBJS} server client
