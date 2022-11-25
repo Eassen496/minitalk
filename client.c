@@ -6,7 +6,7 @@
 /*   By: ale-roux <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 22:53:20 by ale-roux          #+#    #+#             */
-/*   Updated: 2022/11/25 17:10:37 by ale-roux         ###   ########.fr       */
+/*   Updated: 2022/11/25 17:38:26 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	client_send(int pid, char *str)
 		i++;
 		usleep(100);
 	}
+	free(str);
 	return (ft_strlen(str));
 }
 
