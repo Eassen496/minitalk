@@ -6,25 +6,113 @@
 /*   By: ale-roux <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 22:53:20 by ale-roux          #+#    #+#             */
-/*   Updated: 2022/11/25 00:00:16 by ale-roux         ###   ########.fr       */
+/*   Updated: 2022/11/25 16:30:51 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/client.h"
+#include "./header/minitalk.h"
 
-static int	putnbr_binary_len(unsigned char chr)
+size_t	ft_strlen(char *str)
 {
 	int	i;
 
 	i = 0;
-	if (chr == 0)
+	if (!str)
+		return (0);
+	while (str[i])
 		i++;
-	while (chr > 0)
-	{
-		i++;
-		chr = chr / 2;
-	}
 	return (i);
+}
+
+void	*ft_calloc(unsigned int size)
+{
+	char			*ptr;
+	unsigned int	i;
+
+	i = 0;
+	ptr = malloc(size);
+	if (!ptr)
+		return (NULL);
+	while (i < size)
+	{
+		ptr[i] = '\0';
+		i++;
+	}
+	return (ptr);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	unsigned int	i;
+	unsigned int	j;
+	char			*str;
+
+	if (!s2)
+		return (NULL);
+	if (!s1)
+		s1 = ft_calloc(1);
+	str = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (str == NULL)
+	{
+		free(s1);
+		return (NULL);
+	}
+	i = -1;
+	j = 0;
+	if (s1)
+		while (s1[++i] != '\0')
+			str[i] = s1[i];
+	while (s2[j] != '\0')
+		str[i++] = s2[j++];
+	str[i] = '\0';
+	free(s1);
+	free(s2);
+	return (str);
+}
+
+int	whitesp(char *str, int *ptr_i)
+{
+	int	count;
+	int	i;
+	int	sign;
+
+	i = 0;
+	count = 0;
+	sign = 1;
+	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	while (str[i] == 43 || str[i] == 45)
+	{
+		if (str[i] == 45)
+			sign *= -1;
+		i++;
+		count++;
+	}
+	*ptr_i = i;
+	if (count != 0)
+		return (count * sign);
+	else
+		return (sign);
+}
+
+int	ft_atoi(char *str)
+{
+	int	res;
+	int	sign;
+	int	i;
+
+	res = 0;
+	sign = whitesp(str, &i);
+	if (sign != -1 && sign != 1)
+		return (0);
+	while (str[i] >= 48 && str[i] <= 57)
+	{
+		res *= 10;
+		res += str[i] - 48;
+		i++;
+	}
+	res *= sign;
+	return (res);
 }
 
 char	*ft_putnbr_binary(unsigned char chr)
@@ -35,8 +123,8 @@ char	*ft_putnbr_binary(unsigned char chr)
 	char	*base;
 
 	base = "01";
-	len = putnbr_binary_len(nbr);
-	result = malloc((len + 1) * sizeof(char));
+	len = 8;
+	result = ft_calloc((9) * sizeof(char));
 	if (!result)
 		return (NULL);
 	result[len] = '\0';
@@ -44,7 +132,7 @@ char	*ft_putnbr_binary(unsigned char chr)
 	{
 		j = chr % 2;
 		chr = chr / 2;
-		result[--len] = base[j];
+		result[--len] = base[(int)j];
 	}
 	return (result);
 }
@@ -53,17 +141,18 @@ int	client_send(int pid, char *str)
 {
 	int	i;
 	int	err;
+	int	j;
 
 	i = 0;
+	j = 0;
 	while (str[i])
 	{
-		if (str[i] == 0)
+		if (str[i] == 48)
 			err = kill(pid, SIGUSR1);
-		else
+		if (str[i] == 49)
 			err = kill(pid, SIGUSR2);
 		i++;
-		if (err == -1)
-			return (err);
+		usleep(100);
 	}
 	return (ft_strlen(str));
 }
@@ -79,14 +168,14 @@ int	client_logic(char *strpid, char *msg)
 	pid = ft_atoi(strpid);
 	result = ft_calloc(1);
 	if (!result)
-		return (NULL);
+		return (-1);
 	while (msg[i])
 	{
 		binary = ft_putnbr_binary(msg[i]);
 		if (!binary)
 		{
 			free(result);
-			return (NULL);
+			return (-1);
 		}
 		result = ft_strjoin(result, binary);
 		i++;
@@ -97,10 +186,15 @@ int	client_logic(char *strpid, char *msg)
 int	main(int argc, char **argv)
 {
 	int	i;
+	int	test;
 
 	i = 0;
 	if (argc != 3)
 		return (0);
 	else
 	{
-
+		test = client_logic(argv[1], argv[2]);
+		if (test == -1)
+			return (1);
+	}
+}
