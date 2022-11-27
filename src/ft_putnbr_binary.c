@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../header/minitalk.h"
+#include <stdio.h>
 
 char	*ft_putnbr_binary(unsigned char chr)
 {
@@ -21,7 +22,7 @@ char	*ft_putnbr_binary(unsigned char chr)
 
 	base = "01";
 	len = 8;
-	result = ft_calloc((9) * sizeof(char));
+	result = malloc((9) * sizeof(char));
 	if (!result)
 		return (NULL);
 	result[len] = '\0';
